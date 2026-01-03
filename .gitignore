@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+.env
+venv/
+.venv/
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# Runtime data
+games_data/*.json
+config.py
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/

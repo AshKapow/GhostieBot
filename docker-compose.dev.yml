@@ -1,0 +1,8 @@
+services:
+  ghostiebot:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./games_data:/app/games_data
+      - ./config.py:/app/config.py:ro

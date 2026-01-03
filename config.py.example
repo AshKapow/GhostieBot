@@ -1,0 +1,8 @@
+# Discord
+DISCORD_CHANNEL_ID = 1234567890
+
+# Twitch
+TWITCH_CHANNEL = "streamer"
+
+# Tracker
+LIVE_CHECK_SECONDS = 300

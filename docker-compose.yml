@@ -1,0 +1,15 @@
+services:
+  ghostiebot:
+    image: ashkapow/ghostiebot:latest
+    container_name: ghostiebot
+    restart: unless-stopped
+    environment:
+      LOG_LEVEL: INFO
+      DISCORD_TOKEN: YOUR_DISCORD_BOT_TOKEN
+      TWITCH_CLIENT_ID: YOUR_TWITCH_CLIENT_ID
+      TWITCH_CLIENT_SECRET: YOUR_TWITCH_CLIENT_SECRET
+    volumes:
+      # Copy config.py.example -> config.py and edit it for your server
+      - ./config.py:/app/config.py:ro
+      # Persist tracked games between restarts
+      - ./games_data:/app/games_data
