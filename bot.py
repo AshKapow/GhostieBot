@@ -90,9 +90,9 @@ async def on_message(message: discord.Message):
     log.info(f"[GhostieBot] {user} posted '{game_name}' in {forum_name}")
 
     if is_game_known(game_name):
-        await message.reply(f"Ghostkai has played **{game_name}**.")
+        await message.reply(f"{TWITCH_CHANNEL} has played **{game_name}**.")
     else:
-        await message.reply(f"No record of Ghostkai playing **{game_name}**.")
+        await message.reply(f"No record of {TWITCH_CHANNEL} playing **{game_name}**.")
 
 
 async def shutdown(sig: str):
