@@ -87,7 +87,7 @@ async def on_message(message: discord.Message):
 
     user = message.author.display_name
     forum_name = message.channel.parent.name
-    log.info(f"[GhostieBot] {user} posted '{game_name}' in {forum_name}")
+    log.info(f"{user} posted '{game_name}' in {forum_name}")
 
     if is_game_known(game_name):
         await message.reply(f"{TWITCH_CHANNEL} has played **{game_name}**.")
