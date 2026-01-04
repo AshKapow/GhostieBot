@@ -1,35 +1,39 @@
-# steam_api.py
 import re
 import time
 import requests
 
-STEAM_LINK_REGEX = re.compile(
-    r"(?:https?://)?(?:store\.steampowered\.com|steamcommunity\.com|steam://)"
-    r"/(?:(app|sub|bundle|run))/(\d+)",
+_HTTP_STEAM_REGEX = re.compile(
+    r"(?:https?://)?(?:store\.steampowered\.com|steamcommunity\.com)"
+    r"/(?:(app|sub|bundle))/(\d+)",
     re.IGNORECASE,
 )
 
-# appid -> (name, expires_epoch)
+_STEAM_RUN_REGEX = re.compile(
+    r"steam://run/(\d+)",
+    re.IGNORECASE,
+)
+
 _CACHE: dict[str, tuple[str, float]] = {}
 _TTL_SECONDS = 24 * 60 * 60  # 24h
 
 
-def extract_steam_ref(text: str) -> tuple[str, str] | None:
-    m = STEAM_LINK_REGEX.search(text or "")
+def extract_appid(text: str) -> str | None:
+    text = text or ""
+
+    m = _STEAM_RUN_REGEX.search(text)
+    if m:
+        return m.group(1)
+
+    m = _HTTP_STEAM_REGEX.search(text)
     if not m:
         return None
+
     kind = (m.group(1) or "").lower()
     steam_id = m.group(2)
-    return (kind, steam_id)
 
-
-def extract_appid(text: str) -> str | None:
-    ref = extract_steam_ref(text)
-    if not ref:
-        return None
-    kind, steam_id = ref
-    if kind in ("app", "run"):
+    if kind == "app":
         return steam_id
+
     return None
 
 
