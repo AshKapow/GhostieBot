@@ -15,6 +15,7 @@ class LiveTracker:
 
         self.token: str | None = None
         self.online: bool | None = None
+        self.last_game: str | None = None
         self._loop = None
 
     def _refresh_token(self) -> None:
@@ -40,23 +41,33 @@ class LiveTracker:
                     self.channel,
                 )
 
-            if game:
-                if self.online is not True:
-                    log.info(f"{self.channel} is now ONLINE")
-                self.online = True
-
-                games = load_games(self.games_file)
-                is_new = add_game(games, game)
-                save_games(self.games_file, games)
-
-                log.info(
-                    f"{'NEW' if is_new else 'KNOWN'} "
-                    f"'{game}' for {self.channel}"
-                )
-            else:
+            # OFFLINE
+            if not game:
                 if self.online is not False:
                     log.info(f"{self.channel} is now OFFLINE")
                 self.online = False
+                self.last_game = None
+                return
+
+            # ONLINE
+            if self.online is not True:
+                log.info(f"{self.channel} is now ONLINE")
+            self.online = True
+
+            # Game unchanged → no log, no write
+            if game == self.last_game:
+                return
+
+            self.last_game = game
+
+            games = load_games(self.games_file)
+            is_new = add_game(games, game)
+            save_games(self.games_file, games)
+
+            log.info(
+                f"{'NEW' if is_new else 'KNOWN'} "
+                f"'{game}' for {self.channel}"
+            )
 
         except Exception as e:
             log.error(f"Poll error: {type(e).__name__}: {e}")
